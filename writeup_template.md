@@ -60,8 +60,8 @@ The goals / steps of this project are the following:
 
 
 [video1]: ./project_video.mp4 "Video"
-[01_project_video.mp4]: .output_videos/01_project_video.mp4 "Video 1 "
-[02_project_video.mp4]: .output_videos/02_project_video.mp4 "Video 2 "
+[01_project_video.mp4]: ./output_videos/01_project_video.mp4 "Video 1 "
+[02_project_video.mp4]: ./output_videos/02_project_video.mp4 "Video 2 "
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
