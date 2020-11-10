@@ -97,9 +97,9 @@ All this logic you can find in class CameraCalibrator
 
 ###### 1. Undisord 
 
- Original ![alt text][original.png]
- Undistorted ![alt text][undisorted.png]
- Merged ![alt text][merged.png] 
+ ![alt text][original.png]
+ ![alt text][undisorted.png]
+ ![alt text][merged.png] 
 
  
  (Usually it is part of smart camera in car)
@@ -214,8 +214,10 @@ NN can reduse dependancy for :
 ### Results 
 
 <!-- #endregion -->
-![alt text][01_project_video.mp4] 
-![alt text][02_project_video.mp4] or https://youtu.be/eCO6aTeSsxM
+![Video result 1 ][01_project_video.mp4] 
+![Video result 1 ][02_project_video.mp4] 
+
+or https://youtu.be/eCO6aTeSsxM
 ```python
 
 ```
