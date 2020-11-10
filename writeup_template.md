@@ -97,7 +97,7 @@ All this logic you can find in class CameraCalibrator
 
 ###### 1. Undisord 
 
- ![alt text][original.png]
+ ![original][original.png]
  ![alt text][undisorted.png]
  ![alt text][merged.png] 
 
