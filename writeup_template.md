@@ -55,8 +55,12 @@ The goals / steps of this project are the following:
 [combine_and_transpose.png]:  ./examples/documentation_src/combine_and_transpose.png "combine_and_transpose"
 [windows_aproach.png]:  ./examples/documentation_src/windows_aproach.png "windows_aproach"
 [choose_lane.png]:  ./examples/documentation_src/choose_lane.png "choose_lane"
+[sobel.svg]:  ./examples/documentation_src/sobel.svg "sobel"
+[magnitude_sobel.svg]:  ./examples/documentation_src/magnitude_sobel.svg "magnitude_sobel"
+[direction_sobel.svg]:  ./examples/documentation_src/direction_sobel.svg "direction_sobel"
 
-
+[bird_view_mathematic.svg]:  ./examples/documentation_src/bird_view_mathematic.svg "bird_view_mathematic"
+[bird_view_scheme.png]:     ./examples/documentation_src/bird_view_scheme.png "bird_view_scheme"
 
 
 [video1]: ./project_video.mp4 "Video"
@@ -110,28 +114,28 @@ merged - ![alt text][merged.png]
 
  
  (Usually it is part of smart camera in car)
- 
-######  2. Perspective transformer
 
-Points ![alt text][Points.png] 
-p1  = [ 210 , 680 ]  
-p2  = [ 570 , 460 ]  
-p3  = [ 710 , 460 ] 
-p4  = [ 1070, 680 ] 
-simple_camera_roi = np.array([p1,p2,p3,p4] , np.int32)
+###### 2. Use color transforms, gradients, etc., to create a thresholded binary image.
 
-p1_transofrmed = [ 260 , 720  ]       
-p2_transofrmed = [ 260 , 0    ]      
-p3_transofrmed = [ 1020 , 0   ]       
-p4_transofrmed = [ 1020 , 720 ]   
+We will use Sobel operator (Sobel-Feldman). More ditailed you can find https://en.wikipedia.org/wiki/Sobel_operator
+Here is examples of Sobel matrix for kernel size 3 :
 
-For transformation you can look at the class : perspectiveTransformer
+gradx, grady  
+![alt text][sobel.svg]
 
-  Before ![alt text][before_transformed.png]
-  After ![alt text][after_transformed.png] 
 
-###### 3. Use color transforms, gradients, etc., to create a thresholded binary image.
+Magnitude of gradient  
+![alt text][magnitude_sobel.svg]
 
+Directional  
+![alt text][direction_sobel.svg]
+
+Implementation of each of this mathematicals operations you can find in class
+**BinaryTransformer**
+
+Main pipeline of BinaryTransformer is next :
+
+**We will use sobel , but before it will be usefull to transform to HLS, and take S chanel. In terms of our issue changes in S chanel is most informative*.
 
        3.1 Lets convert to HLS, and take S channel for sobel 
        saturation = cv2.cvtColor(frame , cv2.COLOR_RGB2HLS)[:,:,2]   operations.
@@ -148,17 +152,59 @@ dir_binary  ![alt text][dir_binary.png]
        3.5 And the last one thing, we can achive binary map frfom combination of colors that we expect on images
 color_binary  ![alt text][color_binary.png] 
 
+
        3.6 combine all binary maps 
                combined[((gradx == 1)
                  | ((mag_binary == 1)
                     & (dir_binary == 1))) & (color_binary==1)] = 1
                     
-Combine and transpose  ![alt text][combine_and_transpose.png]   
+Combine and transpose  (* to achieve it full please take a look point 3 )
+ ![alt text][combine_and_transpose.png]
 
         
         
         Code you can find at class BinaryTransformer 
-        
+
+######  3. Perspective transformer
+
+Good theory base here:   https://en.wikipedia.org/wiki/3D_projection#Perspective_projection'
+
+and here  :
+
+https://developer.ridgerun.com/wiki/index.php?title=Birds_Eye_View/Introduction/Research
+
+ ![alt text][bird_view_scheme.png]:
+ To obtain the output bird-s eye view image a transformation using the following projection matrix can be used. It maps the relationship between pixel (x,y) of bird's eye view image and pixel (u,v) from the input image.
+ ![alt text][bird_view_mathematic.svg]:
+ There are 3 assumptions when working without post transformation techniques:
+
+1 .The camera is in a fixed position with respect to the road.
+
+2. The road surface is planar.
+
+3. The road surface is free of obstacles.
+
+
+Points ![alt text][Points.png]
+p1  = [ 210 , 680 ]  
+p2  = [ 570 , 460 ]  
+p3  = [ 710 , 460 ]
+p4  = [ 1070, 680 ]
+simple_camera_roi = np.array([p1,p2,p3,p4] , np.int32)
+
+p1_transofrmed = [ 260 , 720  ]  
+p2_transofrmed = [ 260 , 0    ]  
+p3_transofrmed = [ 1020 , 0   ]  
+p4_transofrmed = [ 1020 , 720 ]
+
+For transformation you can look at the class : perspectiveTransformer
+
+  Before  
+  ![alt text][before_transformed.png]
+
+  After  
+  ![alt text][after_transformed.png]
+
         
 ###### 4 . Logic for detect initial bucket of points 
 Slice window approach  ![alt text][windows_aproach.png] 
