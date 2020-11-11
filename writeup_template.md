@@ -61,8 +61,6 @@ The goals / steps of this project are the following:
 
 [bird_view_mathematic.svg]:  ./examples/documentation_src/bird_view_mathematic.svg "bird_view_mathematic"
 [bird_view_scheme.png]:     ./examples/documentation_src/bird_view_scheme.png "bird_view_scheme"
-
-
 [video1]: ./project_video.mp4 "Video"
 [01_project_video.mp4]: ./output_videos/01_project_video.mp4 "Video 1 "
 [02_project_video.mp4]: ./output_videos/02_project_video.mp4 "Video 2 "
@@ -81,7 +79,9 @@ You're reading it!
 
 ### Camera Calibration
 
+
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image. Thus, objp is just a replicated array of coordinates, and objpoints will be appended with a copy of it every time I successfully detect all chessboard corners in a test image. imgpoints will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.
+![calibration_theory_1](examples/documentation_src/calibration_theory_1.png)
 
 I then used the output objpoints and imgpoints to compute the camera calibration and distortion coefficients using the cv2.calibrateCamera() function. I applied this distortion correction to the test image using the cv2.undistort() function and obtained this result:
 
@@ -108,9 +108,15 @@ All this logic you can find in class CameraCalibrator
 
 ###### 1. Undisord 
 
-original - ![original][original.png]
-undisorted -  ![alt text][undisorted.png]
-merged - ![alt text][merged.png] 
+original
+
+![original][original.png]
+
+undisorted  
+![alt text][undisorted.png]
+
+merged  
+![alt text][merged.png]
 
  
  (Usually it is part of smart camera in car)
@@ -208,7 +214,16 @@ For transformation you can look at the class : perspectiveTransformer
         
 ###### 4 . Logic for detect initial bucket of points 
 Slice window approach  ![alt text][windows_aproach.png] 
-        
+First of all we need to detrminate start positions of two windows( for left and right lanes).  
+For this we will use histogram of bottom part binary croped image, that we get on previos steps.
+
+histogram = np.sum(binary_warped[binary_warped.shape[0]//2:,:], axis=0)
+
+
+After that we dfine some hyper-params as windows count, margin ect.  
+And for each next window starting from first we will calculate new start position, and take points from this window to our np array.  
+And at the end, we will build polinomial from this points.
+
         Code you can find in functions :
         
         def find_lane_pixels(binary_warped)
@@ -222,7 +237,7 @@ Slice window approach  ![alt text][windows_aproach.png]
    ![alt text][test_image.png]     
    ![alt text][result.png] 
      
-#### additional steps for more stability
+#### Additional steps for more stability
 
 We can faced with situation , when our extraction methods cannot achive needed result in some situation, here is :
 
