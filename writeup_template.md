@@ -114,7 +114,7 @@ original
 undisorted  
 ![alt text][undisorted.png]
 
-merged  
+merged. As you can see, there are nearest to corners pixel not matched, with original. That means that we remove optical distortion. 
 ![alt text][merged.png]
 
  
