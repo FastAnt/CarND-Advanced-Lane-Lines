@@ -77,17 +77,24 @@ You're reading it!
 
 ### Camera Calibration
 
-#### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
+I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image. Thus, objp is just a replicated array of coordinates, and objpoints will be appended with a copy of it every time I successfully detect all chessboard corners in a test image. imgpoints will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.
+
+I then used the output objpoints and imgpoints to compute the camera calibration and distortion coefficients using the cv2.calibrateCamera() function. I applied this distortion correction to the test image using the cv2.undistort() function and obtained this result:
 
 For camera calibration I use standard aproach : 
-
 1. ret, corners = cv2.findChessboardCorners(gray, (9,6),None)  - 9, 6 count of corners
 2. cv2.drawChessboardCorners(img, (9,6), corners, ret) - for verify
 3. ret, self.mtx, self.dist, self.rvecs, self.tvecs = cv2.calibrateCamera(self.objpoints, self.imgpoints,              gray.shape[::-1],None,None)  - self.mtx, self.dist matrix for undistord
 4. undistorted = cv2.undistort(framme,self.mtx, self.dist) - undistord frame , means remove optical deformations
 
+** Not all calibration images are ok, for example :
+../camera_cal/calibration4.jpg
+../camera_cal/calibration1.jpg
+../camera_cal/calibration5.jpg
+findChessboardCorners returne error for these samples.
 
-All this logic you can find in class CameraCalibrator
+
+All this logic you can find in class CameraCalibrator 
 
 
 ![alt text][image1]
